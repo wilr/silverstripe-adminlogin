@@ -7,4 +7,3 @@ Security:
 LeftAndMain:
   extensions:
     - LimitAdminAccessExtension
----
