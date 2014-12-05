@@ -12,7 +12,7 @@ matrix:
   - php: 5.4
     env: DB=MYSQL CORE_RELEASE=master
 script: 
-- phpunit silverstripe-adminlogin/tests
+- vendor/bin/phpunit silverstripe-adminlogin/tests/
 env: 
   matrix: 
   - DB=MYSQL CORE_RELEASE=3.1
