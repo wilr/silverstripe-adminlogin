@@ -17,13 +17,6 @@ class AdminLoginExtension extends Extension {
 	}
 }
 
-/**
- * Dummy Controller to prevent loading frontend css and javscript files
- */
-class AdminLoginPage_Controller extends ContentController {
-	
-}
-
 class AdminSecurity extends Security {
 	
 	private static $allowed_actions = array( 
@@ -52,8 +45,7 @@ class AdminSecurity extends Security {
 		}
 		
 		// this prevents loading frontend css and javscript files
-		Object::useCustomClass('Page_Controller','AdminLoginPage_Controller');
-		Object::useCustomClass('MemberLoginForm','AdminLoginForm');
+		Requirements::clear();
 		Requirements::css('adminlogin/css/style.css');
 	}
 	

@@ -1,7 +1,7 @@
+---
 name: IpAccess
 ---
 IpAccess:
   enabled: false
   allowed_ips:
     - ''
----
