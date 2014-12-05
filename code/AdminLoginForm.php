@@ -13,7 +13,7 @@ class AdminLoginForm extends MemberLoginForm {
 			$this->Actions()->removeByName('forgotPassword');
 			$this->Actions()->push(new LiteralField(
 						'forgotPassword',
-						'<p id="ForgotPassword"><a href="AdminSecurity/lostpassword">'
+						'<p id="ForgotPassword"><a href="Security/lostpassword">'
 						. _t('Member.BUTTONLOSTPASSWORD', "I've lost my password") . '</a></p>'
 					));
 		}
