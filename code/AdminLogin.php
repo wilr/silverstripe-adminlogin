@@ -20,8 +20,10 @@ class AdminLoginExtension extends Extension {
 /**
  * Dummy Controller to prevent loading frontend css and javscript files
  */
-class AdminLoginPage_Controller extends ContentController {
-	
+if(class_exists('ContentController')){
+	class AdminLoginPage_Controller extends ContentController {
+		
+	}
 }
 
 class AdminSecurity extends Security {
@@ -52,7 +54,9 @@ class AdminSecurity extends Security {
 		}
 		
 		// this prevents loading frontend css and javscript files
-		Object::useCustomClass('Page_Controller','AdminLoginPage_Controller');
+		if(class_exists('Page_Controller')){
+			Object::useCustomClass('Page_Controller','AdminLoginPage_Controller');
+		}
 		Object::useCustomClass('MemberLoginForm','AdminLoginForm');
 		Requirements::css('adminlogin/css/style.css');
 	}
