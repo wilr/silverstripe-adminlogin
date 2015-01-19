@@ -27,7 +27,8 @@ class AdminLoginPage_Controller extends ContentController {
 class AdminSecurity extends Security {
 	
 	private static $allowed_actions = array( 
-		'passwordsent'
+		'passwordsent',
+		'ChangePasswordForm'
 	);
 	
 	/**
