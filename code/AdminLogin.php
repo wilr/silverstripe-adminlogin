@@ -52,10 +52,13 @@ class AdminSecurity extends Security {
 			}
 		}
 		
-		// this prevents loading frontend css and javscript files
-		Object::useCustomClass('Page_Controller','AdminLoginPage_Controller');
+		if(Config::inst()->get('AdminLogin', 'UseTheme') !== true) {
+			// this prevents loading frontend css and javscript files
+			Object::useCustomClass('Page_Controller','AdminLoginPage_Controller');
+			Requirements::css('adminlogin/css/style.css');
+		}
+
 		Object::useCustomClass('MemberLoginForm','AdminLoginForm');
-		Requirements::css('adminlogin/css/style.css');
 	}
 	
 	public function Link($action = null) {
