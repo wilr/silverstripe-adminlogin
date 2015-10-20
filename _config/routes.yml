@@ -1,0 +1,7 @@
+---
+Name: adminloginroutes
+After: '#adminroutes'
+---
+Director:
+  rules:
+    'AdminSecurity//$Action/$ID/$OtherID': 'AdminSecurity'
