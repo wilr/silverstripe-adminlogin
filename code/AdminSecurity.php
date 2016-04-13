@@ -93,7 +93,7 @@ class AdminSecurity extends Security
      * @see Security::getPasswordResetLink()
      * We overload this, so we can add the BackURL to the password resetlink
      * @param Member $member
-     * @param $autologinToken
+     * @param string $autologinToken
      * @return string
      */
     public static function getPasswordResetLink($member, $autologinToken)
