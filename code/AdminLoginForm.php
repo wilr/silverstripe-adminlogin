@@ -7,7 +7,7 @@ class AdminLoginForm extends MemberLoginForm
     {
         parent::__construct($controller, $name, $fields, $actions, $checkCurrentUser);
 
-        if ($field = $this->Actions()->fieldByName('forgotPassword')) {
+        if ($this->Actions()->fieldByName('forgotPassword')) {
             // replaceField won't work, since it's a dataless field
             $this->Actions()->removeByName('forgotPassword');
             $this->Actions()->push(new LiteralField(
@@ -27,32 +27,26 @@ JS
     }
 
     /**
-     *
+     * @param array $data
      */
     public function forgotPassword($data)
     {
-        $SQL_data  = Convert::raw2sql($data);
-        $SQL_email = $SQL_data['Email'];
+        $email = Convert::raw2sql($data['Email']);
 
         /* @var $member Member */
-        $member = DataObject::get_one('Member', "\"Email\" = '{$SQL_email}'");
-
-        $backUrlString = '';
-        if (isset($data['BackURL']) && $backURL = $data['BackURL']) {
-            $backUrlString = '?BackURL=' . $backURL;
-        }
+        $member = Member::get()->where("Email = '{$email}'")->first();
 
         if ($member) {
             $token = $member->generateAutologinTokenAndStoreHash();
 
-            /* @var $e Member_ForgotPasswordEmail */
-            $e = Member_ForgotPasswordEmail::create();
-            $e->populateTemplate($member);
-            $e->populateTemplate(array(
+            /* @var $email Member_ForgotPasswordEmail */
+            $email = Member_ForgotPasswordEmail::create();
+            $email->populateTemplate($member);
+            $email->populateTemplate(array(
                 'PasswordResetLink' => AdminSecurity::getPasswordResetLink($member, $token)
             ));
-            $e->setTo($member->Email);
-            $e->send();
+            $email->setTo($member->Email);
+            $email->send();
 
             $this->controller->redirect('AdminSecurity/passwordsent/' . urlencode($data['Email']));
         } elseif ($data['Email']) {
