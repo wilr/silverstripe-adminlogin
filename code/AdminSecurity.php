@@ -3,6 +3,7 @@
 
 /**
  * Class AdminSecurity
+ *
  */
 class AdminSecurity extends Security
 {
@@ -30,14 +31,15 @@ class AdminSecurity extends Security
         parent::init();
 
         if (Config::inst()->get('IpAccess', 'enabled')) {
-            $ipAccess = new IpAccess($this->owner->getRequest()->getIP(),
+            $ipAccess = new IpAccess($this->getRequest()->getIP(),
                 Config::inst()->get('IpAccess', 'allowed_ips'));
             if (!$ipAccess->hasAccess()) {
-                $reponse = '';
+                $response = null;
                 if (class_exists('ErrorPage', true)) {
                     $response = ErrorPage::response_for(404);
                 }
-                return $this->owner->httpError(404, $response ? $response : 'The requested page could not be found.');
+                $this->httpError(404, $response ? $response : 'The requested page could not be found.');
+                exit();
             }
         }
 
@@ -72,11 +74,11 @@ class AdminSecurity extends Security
      */
     public static function getBackUrl()
     {
-        if (isset($_REQUEST['BackURL'])) {
-            return $_REQUEST['BackURL'];
-        } elseif (isset($_SESSION['BackURL'])) {
-            return $_SESSION['BackURL'];
+        $request = Controller::curr()->getRequest();
+        if($url = $request->requestVar('BackURL')) {
+            return $url;
         }
+        return '';
     }
 
     /**

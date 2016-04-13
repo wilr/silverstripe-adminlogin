@@ -15,6 +15,7 @@ class LimitAdminAccessExtension extends Extension
                 Config::inst()->get('IpAccess', 'allowed_ips'));
 
             if (!$ipAccess->hasAccess()) {
+                $response = null;
                 if (class_exists('ErrorPage', true)) {
                     $response = ErrorPage::response_for(403);
                 }

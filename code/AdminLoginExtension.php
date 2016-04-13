@@ -2,17 +2,25 @@
 
 /**
  * Custom Admin Login form screen
+ *
  * This login screen get also ip based access protection when enabled
+ *
+ * @property Security|AdminLoginExtension $owner
  */
 class AdminLoginExtension extends Extension
 {
 
-    // redirect to AdminSecurity, when we are coming from /admin/*
+    /**
+     * Redirect to AdminSecurity, when we are coming from /admin/*
+     *
+     * @return SS_HTTPResponse|void
+     */
     public function onBeforeSecurityLogin()
     {
-        if (isset($_GET['BackURL']) && strstr($_GET['BackURL'], '/admin/')) {
+        $backUrl = $this->owner->getRequest()->getVar('BackURL');
+        if (strstr($backUrl, '/admin/')) {
             if (Controller::curr()->class != 'AdminSecurity') {
-                $link = 'AdminSecurity/login' . '?BackURL=' . urlencode($_GET['BackURL']);
+                $link = 'AdminSecurity/login' . '?BackURL=' . urlencode($backUrl);
                 return $this->owner->redirect($link);
             }
         }
