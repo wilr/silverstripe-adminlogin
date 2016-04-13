@@ -39,7 +39,7 @@ class AdminSecurity extends Security
                     $response = ErrorPage::response_for(404);
                 }
                 $this->httpError(404, $response ? $response : 'The requested page could not be found.');
-                exit();
+                return;
             }
         }
 
@@ -93,6 +93,10 @@ class AdminSecurity extends Security
     /**
      * @see Security::getPasswordResetLink()
      * We overload this, so we can add the BackURL to the password resetlink
+     *
+     * @param Member $member
+     * @param $autologinToken
+     * @return string
      */
     public static function getPasswordResetLink($member, $autologinToken)
     {

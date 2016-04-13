@@ -48,7 +48,7 @@ class IpAccess
      */
     public function hasAccess()
     {
-        if (!$this->allowedIps) {
+        if (empty($this->allowedIps)) {
             return 'allowed';
         } elseif ($match = $this->matchExact()) {
             return $match;

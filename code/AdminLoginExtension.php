@@ -5,7 +5,7 @@
  *
  * This login screen get also ip based access protection when enabled
  *
- * @property Security|AdminLoginExtension $owner
+ * @property Security $owner
  */
 class AdminLoginExtension extends Extension
 {
