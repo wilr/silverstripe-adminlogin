@@ -6,6 +6,9 @@
  */
 class AdminSecurity extends Security
 {
+    /**
+     * @var array
+     */
     private static $allowed_actions = array(
         'passwordsent',
         'ChangePasswordForm'
@@ -20,7 +23,7 @@ class AdminSecurity extends Security
     private static $template_main = 'AdminLogin';
 
     /**
-     * @return mixed
+     * @return void
      */
     public function init()
     {
@@ -65,7 +68,7 @@ class AdminSecurity extends Security
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public static function getBackUrl()
     {
