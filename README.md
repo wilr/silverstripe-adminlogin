@@ -1,6 +1,6 @@
 silverstripe-adminlogin
 =======================
-
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/axyr/silverstripe-adminlogin/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/axyr/silverstripe-adminlogin/?branch=master) 
 [![Build Status](https://secure.travis-ci.org/axyr/silverstripe-adminlogin.png)](https://travis-ci.org/axyr/silverstripe-adminlogin)
 
 Use a custom login screen when log in to the admin section.
