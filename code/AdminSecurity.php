@@ -3,7 +3,6 @@
 
 /**
  * Class AdminSecurity
- *
  */
 class AdminSecurity extends Security
 {
@@ -75,7 +74,7 @@ class AdminSecurity extends Security
     public static function getBackUrl()
     {
         $request = Controller::curr()->getRequest();
-        if($url = $request->requestVar('BackURL')) {
+        if ($url = $request->requestVar('BackURL')) {
             return $url;
         }
         return '';
@@ -93,7 +92,6 @@ class AdminSecurity extends Security
     /**
      * @see Security::getPasswordResetLink()
      * We overload this, so we can add the BackURL to the password resetlink
-     *
      * @param Member $member
      * @param $autologinToken
      * @return string
