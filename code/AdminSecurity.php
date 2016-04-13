@@ -82,7 +82,7 @@ class AdminSecurity extends Security
 
     /**
      * @param SS_HTTPRequest $request
-     * @return string
+     * @return SS_HTTPResponse|HTMLText
      */
     public function passwordsent($request)
     {

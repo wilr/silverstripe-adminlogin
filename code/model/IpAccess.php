@@ -62,7 +62,7 @@ class IpAccess
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function matchExact()
     {
