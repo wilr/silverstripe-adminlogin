@@ -76,7 +76,7 @@ class IpAccess extends Object
      */
     public function hasAccess()
     {
-        if(!$this->isEnabled() || empty($this->getAllowedIps())) {
+        if (!$this->isEnabled() || empty($this->getAllowedIps())) {
             return true;
         }
 
@@ -106,7 +106,6 @@ class IpAccess extends Object
 
     /**
      * Try to match against a ip range
-     *
      * Example : 192.168.1.50-100
      *
      * @return string
@@ -117,40 +116,35 @@ class IpAccess extends Object
             return strstr($ip, '-');
         });
 
-        if (!$ranges) {
-            return '';
-        }
-
         $ipFirstPart = substr($this->ip, 0, strrpos($this->ip, '.') + 1);
         $ipLastpart  = substr(strrchr($this->ip, '.'), 1);
 
-        foreach ($ranges as $range) {
+        if (!empty($ranges)) foreach ($ranges as $range) {
             $rangeFirstPart = substr($range, 0, strrpos($range, '.') + 1);
             list ($start, $end) = explode('-', substr(strrchr($range, '.'), 1));
-            if($ipFirstPart === $rangeFirstPart && $ipLastpart >= $start && $ipLastpart <= $end) {
+            if ($ipFirstPart === $rangeFirstPart && $ipLastpart >= $start && $ipLastpart <= $end) {
                 return $range;
             }
         }
+        return '';
     }
 
     /**
      * Try to match cidr range
-     *
      * Example : 192.168.1.0/24
      *
      * @return string
      */
     public function matchCIDR()
     {
-        if ($ranges = array_filter($this->getAllowedIps(), function ($ip) {
+        $ranges = array_filter($this->getAllowedIps(), function ($ip) {
             return strstr($ip, '/');
-        })
-        ) {
-            foreach ($ranges as $cidr) {
-                list ($net, $mask) = explode('/', $cidr);
-                if ((ip2long($this->ip) & ~((1 << (32 - $mask)) - 1)) == ip2long($net)) {
-                    return $cidr;
-                }
+        });
+
+        if (!empty($ranges)) foreach ($ranges as $range) {
+            list ($net, $mask) = explode('/', $cidr);
+            if ((ip2long($this->ip) & ~((1 << (32 - $mask)) - 1)) == ip2long($net)) {
+                return $cidr;
             }
         }
         return '';
@@ -158,7 +152,6 @@ class IpAccess extends Object
 
     /**
      * Try to match against a range that ends with a wildcard *
-     *
      * Example : 192.168.1.*
      * Example : 192.168.*
      *
@@ -166,14 +159,13 @@ class IpAccess extends Object
      */
     public function matchWildCard()
     {
-        if ($ranges = array_filter($this->getAllowedIps(), function ($ip) {
+        $ranges = array_filter($this->getAllowedIps(), function ($ip) {
             return substr($ip, -1) === '*';
-        })
-        ) {
-            foreach ($ranges as $range) {
-                if (substr($this->ip, 0, strlen(substr($range, 0, -1))) === substr($range, 0, -1)) {
-                    return $range;
-                }
+        });
+
+        if (!empty($ranges)) foreach ($ranges as $range) {
+            if (substr($this->ip, 0, strlen(substr($range, 0, -1))) === substr($range, 0, -1)) {
+                return $range;
             }
         }
         return '';

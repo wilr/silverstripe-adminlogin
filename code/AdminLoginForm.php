@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Class AdminLoginForm
+ */
 class AdminLoginForm extends MemberLoginForm
 {
 
@@ -28,6 +31,7 @@ JS
 
     /**
      * @param array $data
+     * @return SS_HTTPResponse
      */
     public function forgotPassword($data)
     {
