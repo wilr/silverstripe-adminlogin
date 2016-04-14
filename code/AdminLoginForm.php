@@ -39,14 +39,7 @@ JS
         if ($member) {
             $token = $member->generateAutologinTokenAndStoreHash();
 
-            /* @var $email Member_ForgotPasswordEmail */
-            $email = Member_ForgotPasswordEmail::create();
-            $email->populateTemplate($member);
-            $email->populateTemplate(array(
-                'PasswordResetLink' => AdminSecurity::getPasswordResetLink($member, $token)
-            ));
-            $email->setTo($member->Email);
-            $email->send();
+            $this->sendPasswordResetLinkEmail($member, $token);
 
             $this->controller->redirect('AdminSecurity/passwordsent/' . urlencode($data['Email']));
         } elseif ($data['Email']) {
@@ -62,4 +55,21 @@ JS
             $this->controller->redirect('AdminSecurity/lostpassword');
         }
     }
+
+    /**
+     * @param $member
+     * @param $token
+     */
+    protected function sendPasswordResetLinkEmail($member, $token)
+    {
+        /* @var $email Member_ForgotPasswordEmail */
+        $email = Member_ForgotPasswordEmail::create();
+        $email->populateTemplate($member);
+        $email->populateTemplate(array(
+            'PasswordResetLink' => AdminSecurity::getPasswordResetLink($member, $token)
+        ));
+        $email->setTo($member->Email);
+        $email->send();
+    }
+
 }
