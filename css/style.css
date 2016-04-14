@@ -2,13 +2,13 @@ html {
 	height:100%;
 }
 body {
-	background: url("../../framework/admin/images/textures/bg_cms_main_content.png") repeat scroll left top #F0F3F4!important;	
+	background: url("../../framework/admin/images/textures/bg_cms_main_content.png") repeat scroll left top #F0F3F4!important;
 	height:100%;
-	color:#3D3938;
 	color: #444444;
     font-family: Arial,sans-serif;
     font-size: 12px;
     line-height: 16px;
+    margin: 0;
 }
 
 a {
@@ -21,18 +21,18 @@ fieldset, form {
 	padding:0px;
 }
 .form {
-	width:220px;
+    width: 85%;
+	max-width:260px;
 	margin:0 auto 5px auto;
 	padding:10px;
 	border:1px solid #899D97;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-	box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
 	background:#fff;
 }
 
 .form h3{
-	color:#015893;	
+	color:#015893;
 }
 
 .loginlogo{
@@ -134,11 +134,11 @@ input[type="color"]:focus,
     line-height: 16px;
     padding: 8px 8px 8px 0;
     text-shadow: 1px 1px 0 white;
-    width: 176px;
+    width: 100%;
 }
 
 @media (max-width: 320px) {
-	
+
 	.loginlogo{
 		margin:20px auto 10px auto;
 	}
