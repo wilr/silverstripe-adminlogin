@@ -117,12 +117,12 @@ class IpAccess extends Object
         });
 
         $ipFirstPart = substr($this->ip, 0, strrpos($this->ip, '.') + 1);
-        $ipLastpart  = substr(strrchr($this->ip, '.'), 1);
+        $ipLastPart  = substr(strrchr($this->ip, '.'), 1);
 
         if (!empty($ranges)) foreach ($ranges as $range) {
             $rangeFirstPart = substr($range, 0, strrpos($range, '.') + 1);
             list ($start, $end) = explode('-', substr(strrchr($range, '.'), 1));
-            if ($ipFirstPart === $rangeFirstPart && $ipLastpart >= $start && $ipLastpart <= $end) {
+            if ($ipFirstPart === $rangeFirstPart && $ipLastPart >= $start && $ipLastPart <= $end) {
                 return $range;
             }
         }
