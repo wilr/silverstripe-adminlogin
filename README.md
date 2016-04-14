@@ -1,6 +1,6 @@
 silverstripe-adminlogin
 =======================
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/axyr/silverstripe-adminlogin/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/axyr/silverstripe-adminlogin/?branch=master) 
+[![Scrutinizer](https://img.shields.io/scrutinizer/g/axyr/silverstripe-adminlogin.svg)](https://scrutinizer-ci.com/g/axyr/silverstripe-adminlogin/)
 [![Travis](https://img.shields.io/travis/axyr/silverstripe-adminlogin.svg)](https://travis-ci.org/axyr/silverstripe-adminlogin)
 [![Packagist](https://img.shields.io/packagist/dt/axyr/silverstripe-adminlogin.svg)](https://packagist.org/packages/axyr/silverstripe-adminlogin)
 [![Packagist](https://img.shields.io/packagist/v/axyr/silverstripe-adminlogin.svg)](https://packagist.org/packages/axyr/silverstripe-adminlogin)
