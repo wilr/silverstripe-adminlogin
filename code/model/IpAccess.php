@@ -76,7 +76,7 @@ class IpAccess extends Object
      */
     public function hasAccess()
     {
-        if (!$this->isEnabled() || empty($this->getAllowedIps())) {
+        if (!$this->isEnabled() || !(bool)$this->getAllowedIps()) {
             return true;
         }
 
