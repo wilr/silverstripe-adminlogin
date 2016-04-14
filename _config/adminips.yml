@@ -1,5 +1,5 @@
-name: IpAccess
+---
+Name: IpAccess
 ---
 IpAccess:
   enabled: false
----
