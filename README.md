@@ -5,6 +5,9 @@ silverstripe-adminlogin
 [![Packagist](https://img.shields.io/packagist/dt/axyr/silverstripe-adminlogin.svg)](https://packagist.org/packages/axyr/silverstripe-adminlogin)
 [![Packagist](https://img.shields.io/packagist/v/axyr/silverstripe-adminlogin.svg)](https://packagist.org/packages/axyr/silverstripe-adminlogin)
 
+##Installation
+Run ```composer require axyr/silverstripe-adminlogin```
+
 Use a custom login screen when log in to the admin section.
 
 You can also limit the admin/cms section by ip address (ranges).
