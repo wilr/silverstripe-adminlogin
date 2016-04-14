@@ -2,6 +2,8 @@
 
 /**
  * Class LimitAdminAccessExtension
+ *
+ * @property LeftAndMain $owner
  */
 class LimitAdminAccessExtension extends Extension
 {
@@ -10,20 +12,9 @@ class LimitAdminAccessExtension extends Extension
      */
     public function onBeforeInit()
     {
-        if (Config::inst()->get('IpAccess', 'enabled')) {
-            $ipAccess = new IpAccess($this->owner->getRequest()->getIP(),
-                Config::inst()->get('IpAccess', 'allowed_ips'));
-
-            if (!$ipAccess->hasAccess()) {
-                $response = null;
-                if (class_exists('ErrorPage', true)) {
-                    $response = ErrorPage::response_for(403);
-                }
-
-                $response = ($response) ? $response : 'The requested page could not be found.';
-
-                return $this->owner->httpError(403, $response);
-            }
+        $access = new IpAccess($this->owner->getRequest()->getIP());
+        if (!$access->hasAccess()) {
+            $access->respondNoAccess($this->owner);
         }
     }
 }

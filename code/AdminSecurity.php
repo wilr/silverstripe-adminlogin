@@ -29,17 +29,9 @@ class AdminSecurity extends Security
     {
         parent::init();
 
-        if (Config::inst()->get('IpAccess', 'enabled')) {
-            $ipAccess = new IpAccess($this->getRequest()->getIP(),
-                Config::inst()->get('IpAccess', 'allowed_ips'));
-            if (!$ipAccess->hasAccess()) {
-                $response = null;
-                if (class_exists('ErrorPage', true)) {
-                    $response = ErrorPage::response_for(404);
-                }
-                $this->httpError(404, $response ? $response : 'The requested page could not be found.');
-                return;
-            }
+        $access = new IpAccess($this->getRequest()->getIP());
+        if (!$access->hasAccess()) {
+            $access->respondNoAccess($this);
         }
 
         if (Config::inst()->get('AdminLogin', 'UseTheme') !== true) {

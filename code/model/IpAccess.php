@@ -11,12 +11,18 @@
  * 192.168.*
  * @return false || string : entry the ip address was matched against
  */
-class IpAccess
+class IpAccess extends Object
 {
     /**
      * @var array
      */
     public $allowedIps = array();
+
+    /**
+     * @config
+     * @var array
+     */
+    private static $allowed_ips = array();
 
     /**
      * @var string
@@ -31,8 +37,10 @@ class IpAccess
      */
     public function __construct($ip = '', $allowedIps = array())
     {
-        $this->ip         = $ip;
-        $this->allowedIps = $allowedIps;
+        parent::__construct();
+        $this->ip = $ip;
+
+        self::config()->allowed_ips = $allowedIps;
     }
 
     /**
@@ -44,40 +52,66 @@ class IpAccess
     }
 
     /**
-     * @return string
+     * @return array
+     */
+    public function getAllowedIps()
+    {
+        if ($this->allowedIps) {
+            Deprecation::notice('1.1', 'Use the "IpAccess.allowed_ips" config setting instead');
+            self::config()->allowed_ips = $this->allowedIps;
+        }
+        return (array)self::config()->allowed_ips;
+    }
+
+    /**
+     * @return bool
      */
     public function hasAccess()
     {
-        if (empty($this->allowedIps)) {
-            return 'allowed';
-        } elseif ($match = $this->matchExact()) {
-            return $match;
-        } elseif ($match = $this->matchRange()) {
-            return $match;
-        } elseif ($match = $this->matchCIDR()) {
-            return $match;
-        } elseif ($match = $this->matchWildCard()) {
-            return $match;
+        if (!(bool)Config::inst()->get('IpAccess', 'enabled')
+            || empty($this->getAllowedIps())
+            || $this->matchExact()
+            || $this->matchRange()
+            || $this->matchCIDR()
+            || $this->matchWildCard())
+        {
+            return true;
         }
+
+        return false;
     }
 
     /**
-     * @return string|null
+     * @param Controller $controller
+     * @throws SS_HTTPResponse_Exception
+     */
+    public function respondNoAccess(Controller $controller)
+    {
+        $response = null;
+        if (class_exists('ErrorPage', true)) {
+            $response = ErrorPage::response_for(403);
+        }
+        $controller->httpError(403, $response ? $response : 'The requested page could not be found.');
+    }
+
+    /**
+     * @return string
      */
     public function matchExact()
     {
-        if (in_array($this->ip, $this->allowedIps)) {
-            return $this->ip;
-        }
+        return in_array($this->ip, $this->getAllowedIps()) ? $this->ip : '';
     }
 
     /**
-     * try to match against a ip range
+     * Try to match against a ip range
+     *
      * Example : 192.168.1.50-100
+     *
+     * @return string
      */
     public function matchRange()
     {
-        if ($ranges = array_filter($this->allowedIps, function ($ip) {
+        if ($ranges = array_filter($this->getAllowedIps(), function ($ip) {
             return strstr($ip, '-');
         })
         ) {
@@ -92,15 +126,19 @@ class IpAccess
                 }
             }
         }
+        return '';
     }
 
     /**
-     * try to match cidr range
+     * Try to match cidr range
+     *
      * Example : 192.168.1.0/24
+     *
+     * @return string
      */
     public function matchCIDR()
     {
-        if ($ranges = array_filter($this->allowedIps, function ($ip) {
+        if ($ranges = array_filter($this->getAllowedIps(), function ($ip) {
             return strstr($ip, '/');
         })
         ) {
@@ -111,16 +149,20 @@ class IpAccess
                 }
             }
         }
+        return '';
     }
 
     /**
-     * try to match against a range that ends with a wildcard *
+     * Try to match against a range that ends with a wildcard *
+     *
      * Example : 192.168.1.*
      * Example : 192.168.*
+     *
+     * @return string
      */
     public function matchWildCard()
     {
-        if ($ranges = array_filter($this->allowedIps, function ($ip) {
+        if ($ranges = array_filter($this->getAllowedIps(), function ($ip) {
             return substr($ip, -1) === '*';
         })
         ) {
@@ -130,6 +172,7 @@ class IpAccess
                 }
             }
         }
+        return '';
     }
 
 }
