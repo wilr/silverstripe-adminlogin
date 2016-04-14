@@ -56,7 +56,7 @@ class IpAccess extends Object
      */
     public function getAllowedIps()
     {
-        if ($this->allowedIps) {
+        if (!empty($this->allowedIps)) {
             Deprecation::notice('1.1', 'Use the "IpAccess.allowed_ips" config setting instead');
             self::config()->allowed_ips = $this->allowedIps;
         }
@@ -68,17 +68,12 @@ class IpAccess extends Object
      */
     public function hasAccess()
     {
-        if (!(bool)Config::inst()->get('IpAccess', 'enabled')
+        return (!(bool)Config::inst()->get('IpAccess', 'enabled')
             || empty($this->getAllowedIps())
             || $this->matchExact()
             || $this->matchRange()
             || $this->matchCIDR()
-            || $this->matchWildCard())
-        {
-            return true;
-        }
-
-        return false;
+            || $this->matchWildCard());
     }
 
     /**
