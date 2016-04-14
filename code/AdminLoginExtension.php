@@ -2,10 +2,10 @@
 
 /**
  * Custom Admin Login form screen
- *
+ * 
  * This login screen get also ip based access protection when enabled
  *
- * @property Security $owner
+ * @property Security|AdminLoginExtension $owner
  */
 class AdminLoginExtension extends Extension
 {

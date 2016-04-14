@@ -3,7 +3,7 @@
 /**
  * Class LimitAdminAccessExtension
  *
- * @property LeftAndMain $owner
+ * @property LeftAndMain|LimitAdminAccessExtension $owner
  */
 class LimitAdminAccessExtension extends Extension
 {
