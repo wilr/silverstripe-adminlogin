@@ -142,9 +142,9 @@ class IpAccess extends Object
         });
 
         if (!empty($ranges)) foreach ($ranges as $range) {
-            list ($net, $mask) = explode('/', $cidr);
+            list ($net, $mask) = explode('/', $range);
             if ((ip2long($this->ip) & ~((1 << (32 - $mask)) - 1)) == ip2long($net)) {
-                return $cidr;
+                return $range;
             }
         }
         return '';
