@@ -66,14 +66,21 @@ class IpAccess extends Object
     /**
      * @return bool
      */
+    public function isEnabled()
+    {
+        return (bool)Config::inst()->get('IpAccess', 'enabled');
+    }
+
+    /**
+     * @return bool
+     */
     public function hasAccess()
     {
-        return (!(bool)Config::inst()->get('IpAccess', 'enabled')
-            || empty($this->getAllowedIps())
-            || $this->matchExact()
-            || $this->matchRange()
-            || $this->matchCIDR()
-            || $this->matchWildCard());
+        if(!$this->isEnabled() || empty($this->getAllowedIps())) {
+            return true;
+        }
+
+        return ($this->matchExact() || $this->matchRange() || $this->matchCIDR() || $this->matchWildCard());
     }
 
     /**
@@ -106,22 +113,24 @@ class IpAccess extends Object
      */
     public function matchRange()
     {
-        if ($ranges = array_filter($this->getAllowedIps(), function ($ip) {
+        $ranges = array_filter($this->getAllowedIps(), function ($ip) {
             return strstr($ip, '-');
-        })
-        ) {
-            foreach ($ranges as $range) {
-                $first = substr($range, 0, strrpos($range, '.') + 1);
-                $last  = substr(strrchr($range, '.'), 1);
-                list ($start, $end) = explode('-', $last);
-                for ($i = $start; $i <= $end; $i++) {
-                    if ($this->ip === $first . $i) {
-                        return $range;
-                    }
-                }
+        });
+
+        if (!$ranges) {
+            return '';
+        }
+
+        $ipFirstPart = substr($this->ip, 0, strrpos($this->ip, '.') + 1);
+        $ipLastpart  = substr(strrchr($this->ip, '.'), 1);
+
+        foreach ($ranges as $range) {
+            $rangeFirstPart = substr($range, 0, strrpos($range, '.') + 1);
+            list ($start, $end) = explode('-', substr(strrchr($range, '.'), 1));
+            if($ipFirstPart === $rangeFirstPart && $ipLastpart >= $start && $ipLastpart <= $end) {
+                return $range;
             }
         }
-        return '';
     }
 
     /**

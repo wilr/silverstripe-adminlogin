@@ -31,34 +31,27 @@ JS
      */
     public function forgotPassword($data)
     {
-        $email = Convert::raw2sql($data['Email']);
+        if($data['Email']) {
+            /* @var $member Member */
+            if ($member = Member::get()->where("Email = '".Convert::raw2sql($data['Email'])."'")->first()) {
+                $token = $member->generateAutologinTokenAndStoreHash();
+                $this->sendPasswordResetLinkEmail($member, $token);
+            }
 
-        /* @var $member Member */
-        $member = Member::get()->where("Email = '{$email}'")->first();
-
-        if ($member) {
-            $token = $member->generateAutologinTokenAndStoreHash();
-
-            $this->sendPasswordResetLinkEmail($member, $token);
-
-            $this->controller->redirect('AdminSecurity/passwordsent/' . urlencode($data['Email']));
-        } elseif ($data['Email']) {
-            // Avoid information disclosure by displaying the same status,
-            // regardless wether the email address actually exists
-            $this->controller->redirect('AdminSecurity/passwordsent/' . urlencode($data['Email']));
-        } else {
-            $this->sessionMessage(
-                _t('Member.ENTEREMAIL', 'Please enter an email address to get a password reset link.'),
-                'bad'
-            );
-
-            $this->controller->redirect('AdminSecurity/lostpassword');
+            return $this->controller->redirect('AdminSecurity/passwordsent/' . urlencode($data['Email']));
         }
+
+        $this->sessionMessage(
+            _t('Member.ENTEREMAIL', 'Please enter an email address to get a password reset link.'),
+            'bad'
+        );
+
+        return $this->controller->redirect('AdminSecurity/lostpassword');
     }
 
     /**
-     * @param $member
-     * @param $token
+     * @param Member $member
+     * @param string $token
      */
     protected function sendPasswordResetLinkEmail($member, $token)
     {
