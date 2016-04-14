@@ -60,7 +60,7 @@ class IpAccess extends Object
             Deprecation::notice('1.1', 'Use the "IpAccess.allowed_ips" config setting instead');
             self::config()->allowed_ips = $this->allowedIps;
         }
-        return (array)self::config()->allowed_ips;
+        return self::$allowed_ips ? self::$allowed_ips : (array)self::config()->allowed_ips;
     }
 
     /**
