@@ -80,6 +80,14 @@ class IpAccess extends Object
             return true;
         }
 
+        return $this->matchIp();
+    }
+
+    /**
+     * @return bool
+     */
+    public function matchIp()
+    {
         return ($this->matchExact() || $this->matchRange() || $this->matchCIDR() || $this->matchWildCard());
     }
 
@@ -116,17 +124,19 @@ class IpAccess extends Object
             return strstr($ip, '-');
         });
 
-        $ipFirstPart = substr($this->ip, 0, strrpos($this->ip, '.') + 1);
-        $ipLastPart  = substr(strrchr($this->ip, '.'), 1);
+        $ip = $this->ip;
 
-        if (!empty($ranges)) foreach ($ranges as $range) {
+        $matches = array_filter($ranges, function ($range) use ($ip) {
+            $ipFirstPart    = substr($ip, 0, strrpos($ip, '.') + 1);
+            $ipLastPart     = substr(strrchr($ip, '.'), 1);
             $rangeFirstPart = substr($range, 0, strrpos($range, '.') + 1);
+
             list ($start, $end) = explode('-', substr(strrchr($range, '.'), 1));
-            if ($ipFirstPart === $rangeFirstPart && $ipLastPart >= $start && $ipLastPart <= $end) {
-                return $range;
-            }
-        }
-        return '';
+
+            return $ipFirstPart === $rangeFirstPart && $ipLastPart >= $start && $ipLastPart <= $end;
+        });
+
+        return array_shift($matches);
     }
 
     /**
