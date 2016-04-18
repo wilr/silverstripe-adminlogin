@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class LimitAdminAccessExtension
+ * Class LimitAdminAccessExtension.
  *
  * @property LeftAndMain $owner
  */
