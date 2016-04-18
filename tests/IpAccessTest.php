@@ -1,26 +1,25 @@
 <?php
 
 /**
- * Class IpAccessTest
+ * Class IpAccessTest.
  *
  * @mixin PHPUnit_Framework_TestCase
  */
 class IpAccessTest extends SapphireTest
 {
-
-    protected $allowedIps = array(
+    protected $allowedIps = [
         '192.168.1.101',
         '192.168.1.100-200',
         '192.168.1.0/24',
-        '192.168.1.*'
-    );
+        '192.168.1.*',
+    ];
 
     /**
      * @expectedException PHPUnit_Framework_Error_Deprecated
      */
     public function testSettingAllowedIpsIsDeprecated()
     {
-        $obj             = new IpAccess('192.168.1.101');
+        $obj = new IpAccess('192.168.1.101');
         $obj->allowedIps = $this->allowedIps;
 
         $obj->getAllowedIps();
@@ -42,7 +41,7 @@ class IpAccessTest extends SapphireTest
     public function testAllowedIpsIsEmpty()
     {
         Config::inst()->update('IpAccess', 'enabled', true);
-        Config::inst()->update('IpAccess', 'allowed_ips', array());
+        Config::inst()->update('IpAccess', 'allowed_ips', []);
         $obj = new IpAccess('192.168.1.101');
         $this->assertEmpty($obj->getAllowedIps());
     }
@@ -50,7 +49,7 @@ class IpAccessTest extends SapphireTest
     public function testHasAccess()
     {
         Config::inst()->update('IpAccess', 'enabled', true);
-        Config::inst()->update('IpAccess', 'allowed_ips', array());
+        Config::inst()->update('IpAccess', 'allowed_ips', []);
         $obj = new IpAccess('192.168.1.101');
 
         $this->assertTrue($obj->hasAccess());
@@ -76,7 +75,7 @@ class IpAccessTest extends SapphireTest
     public function testMatchExact()
     {
         Config::inst()->update('IpAccess', 'enabled', true);
-        Config::inst()->update('IpAccess', 'allowed_ips', array('192.168.1.101'));
+        Config::inst()->update('IpAccess', 'allowed_ips', ['192.168.1.101']);
 
         $obj = new IpAccess('192.168.1.101');
         $this->assertEquals($obj->matchExact(), '192.168.1.101');
@@ -88,7 +87,7 @@ class IpAccessTest extends SapphireTest
     public function testMatchCIDR()
     {
         Config::inst()->update('IpAccess', 'enabled', true);
-        Config::inst()->update('IpAccess', 'allowed_ips', array('192.168.1.0/24'));
+        Config::inst()->update('IpAccess', 'allowed_ips', ['192.168.1.0/24']);
 
         $obj = new IpAccess('192.168.1.101');
 
@@ -104,7 +103,7 @@ class IpAccessTest extends SapphireTest
     public function testMatchRange()
     {
         Config::inst()->update('IpAccess', 'enabled', true);
-        Config::inst()->update('IpAccess', 'allowed_ips', array('192.168.1.100-200'));
+        Config::inst()->update('IpAccess', 'allowed_ips', ['192.168.1.100-200']);
 
         $obj = new IpAccess('192.168.1.101');
 
@@ -123,7 +122,7 @@ class IpAccessTest extends SapphireTest
     public function testMatchWildCard()
     {
         Config::inst()->update('IpAccess', 'enabled', true);
-        Config::inst()->update('IpAccess', 'allowed_ips', array('192.168.1.*'));
+        Config::inst()->update('IpAccess', 'allowed_ips', ['192.168.1.*']);
 
         $obj = new IpAccess('192.168.1.101');
 
@@ -136,20 +135,20 @@ class IpAccessTest extends SapphireTest
         $this->assertEmpty($obj->matchWildCard());
 
         Config::inst()->remove('IpAccess', 'allowed_ips');
-        Config::inst()->update('IpAccess', 'allowed_ips', array('192.168.*'));
+        Config::inst()->update('IpAccess', 'allowed_ips', ['192.168.*']);
         $obj = new IpAccess('192.168.2.2');
         $this->assertEquals($obj->matchWildCard(), '192.168.*');
 
         Config::inst()->remove('IpAccess', 'allowed_ips');
-        Config::inst()->update('IpAccess', 'allowed_ips', array('192.167.*'));
+        Config::inst()->update('IpAccess', 'allowed_ips', ['192.167.*']);
         $this->assertEmpty($obj->matchWildCard());
 
         Config::inst()->remove('IpAccess', 'allowed_ips');
-        Config::inst()->update('IpAccess', 'allowed_ips', array('192.*'));
+        Config::inst()->update('IpAccess', 'allowed_ips', ['192.*']);
         $this->assertEquals($obj->matchWildCard(), '192.*');
 
         Config::inst()->remove('IpAccess', 'allowed_ips');
-        Config::inst()->update('IpAccess', 'allowed_ips', array('10.*'));
+        Config::inst()->update('IpAccess', 'allowed_ips', ['10.*']);
         $this->assertEmpty($obj->matchWildCard());
     }
 }
