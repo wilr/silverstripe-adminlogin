@@ -2,22 +2,23 @@
 
 
 /**
- * Class AdminSecurity
+ * Class AdminSecurity.
  */
 class AdminSecurity extends Security
 {
     /**
      * @var array
      */
-    private static $allowed_actions = array(
+    private static $allowed_actions = [
         'passwordsent',
-        'ChangePasswordForm'
-    );
+        'ChangePasswordForm',
+    ];
 
     /**
      * Template thats used to render the pages.
      *
      * @config
+     *
      * @var string
      */
     private static $template_main = 'AdminLogin';
@@ -45,6 +46,7 @@ class AdminSecurity extends Security
 
     /**
      * @param null $action
+     *
      * @return string
      */
     public function Link($action = null)
@@ -69,11 +71,13 @@ class AdminSecurity extends Security
         if ($url = $request->requestVar('BackURL')) {
             return $url;
         }
+
         return '';
     }
 
     /**
      * @param SS_HTTPRequest $request
+     *
      * @return SS_HTTPResponse|HTMLText
      */
     public function passwordsent($request)
@@ -84,16 +88,19 @@ class AdminSecurity extends Security
     /**
      * @see Security::getPasswordResetLink()
      * We overload this, so we can add the BackURL to the password resetlink
+     *
      * @param Member $member
      * @param string $autologinToken
+     *
      * @return string
      */
     public static function getPasswordResetLink($member, $autologinToken)
     {
-        $autologinToken      = urldecode($autologinToken);
+        $autologinToken = urldecode($autologinToken);
         $selfControllerClass = __CLASS__;
-        $selfController      = new $selfControllerClass();
-        return $selfController->Link('changepassword') . "?m={$member->ID}&t=$autologinToken";
+        $selfController = new $selfControllerClass();
+
+        return $selfController->Link('changepassword')."?m={$member->ID}&t=$autologinToken";
     }
 
     /**
