@@ -34,3 +34,5 @@ AdminLogin:
 
 ## Known issues
 When you are logged in, but don't have admin permissions, the normal site theme will be used.
+
+Requires > 5.4
