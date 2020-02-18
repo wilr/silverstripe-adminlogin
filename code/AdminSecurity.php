@@ -37,11 +37,11 @@ class AdminSecurity extends Security
 
         if (Config::inst()->get('AdminLogin', 'UseTheme') !== true) {
             // this prevents loading frontend css and javscript files
-            Object::useCustomClass('Page_Controller', 'AdminLoginPage_Controller');
+            SS_Object::useCustomClass('Page_Controller', 'AdminLoginPage_Controller');
             Requirements::css('adminlogin/css/style.css');
         }
 
-        Object::useCustomClass('MemberLoginForm', 'AdminLoginForm');
+        SS_Object::useCustomClass('MemberLoginForm', 'AdminLoginForm');
     }
 
     /**
