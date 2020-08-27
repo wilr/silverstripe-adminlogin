@@ -12,7 +12,7 @@
  *
  * @return false || string : entry the ip address was matched against
  */
-class IpAccess extends Object
+class IpAccess extends SS_Object
 {
     /**
      * @var array
